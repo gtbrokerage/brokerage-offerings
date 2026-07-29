@@ -6,7 +6,8 @@
 <title>Active Brokerage Offerings</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', Arial, sans-serif; background: #e8eaf0; padding: 20px; min-height: 100vh; }
+@font-face { font-family: 'BOG 2018'; src: url('https://fonts.gstatic.com/s/notosans/v36/o-0IIpQlx3QUlC5A4PNjXhFVZNyB1Wk.woff2') format('woff2'); }
+body { font-family: 'BOG 2018', 'Segoe UI', Arial, sans-serif; background: #e8eaf0; padding: 20px; min-height: 100vh; }
 .container { max-width: 1360px; margin: 0 auto; background: #f0f2f7; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
 .header { background: #3a3a3a; color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }
 .header h1 { font-size: 20px; font-weight: 700; }
@@ -37,48 +38,34 @@ tbody td { padding: 9px 12px; color: #2a2a2a; }
 </div>
 <div class='section'>
 <div class='section-title bonds-title'>BONDS</div>
-<table>
-<thead class='bonds-head'><tr>
+<table><thead class='bonds-head'><tr>
 <th>ISSUER</th><th>ISIN</th><th>Min Lot</th><th>Maturity</th><th>Price</th><th>Coupon</th><th>YTM</th><th>Avail. Qty</th><th>Currency</th><th>Commission</th><th>Client Status</th>
 </tr></thead><tbody>
-<tr>
-<td>IG Development Georgia</td><td>GE2700605548</td><td>1000</td><td>08/07/2028</td><td>1003.77</td><td>7.25%</td><td>7.25%</td><td>875</td><td>USD</td><td>0.003</td><td>-</td></tr>
-<tr>
-<td>IG Development Georgia</td><td>GE2700605258</td><td>1000</td><td>12/12/2027</td><td>1012.63</td><td>7.75%</td><td>7.50%</td><td>80</td><td>USD</td><td>0.003</td><td>-</td></tr>
-<tr>
-<td>Gudauri Lodge </td><td>GE2700605191</td><td>1000</td><td>03/10/2027</td><td>1029.62</td><td>8.25%</td><td>8.00%</td><td>25</td><td>USD</td><td>0.003</td><td>-</td></tr>
+<tr><td>IG Development Georgia</td><td>GE2700605548</td><td>1000</td><td>08/07/2028</td><td>1003.77</td><td>7.25%</td><td>7.25%</td><td>875</td><td>USD</td><td>0.30%</td><td>-</td></tr>
+<tr><td>IG Development Georgia</td><td>GE2700605258</td><td>1000</td><td>12/12/2027</td><td>1012.63</td><td>7.75%</td><td>7.50%</td><td>80</td><td>USD</td><td>0.30%</td><td>-</td></tr>
+<tr><td>Gudauri Lodge </td><td>GE2700605191</td><td>1000</td><td>03/10/2027</td><td>1029.62</td><td>8.25%</td><td>8.00%</td><td>25</td><td>USD</td><td>0.30%</td><td>-</td></tr>
 </tbody></table></div>
 <div class='section'>
 <div class='section-title structured-title'>STRUCTURED NOTES</div>
-<table>
-<thead class='structured-head'><tr>
+<table><thead class='structured-head'><tr>
 <th>ISSUER</th><th>ISIN</th><th>Min Lot</th><th>Maturity</th><th>Price</th><th>Coupon</th><th>YTM</th><th>Avail. Qty</th><th>Currency</th><th>Commission</th><th>Client Status</th>
 </tr></thead><tbody>
-<tr>
-<td>Nomura International Funding Pte. Ltd. (SK Hynix)</td><td>-</td><td>400000</td><td>1 year note</td><td>TBD</td><td>14.50% p.a.</td><td>TBD</td><td>TBD</td><td>USD</td><td>1% +50 GEL</td><td>Sophisticated</td></tr>
-<tr>
-<td>Nomura International Funding Pte. Ltd. (Samsung)</td><td>XS3384027085</td><td>400000</td><td>1 year note</td><td>TBD</td><td>10.50% p.a.</td><td>TBD</td><td>TBD</td><td>USD</td><td>1% +50 GEL</td><td>Sophisticated</td></tr>
+<tr><td>Nomura International Funding Pte. Ltd. (SK Hynix)</td><td>-</td><td>400000</td><td>1 year note</td><td>TBD</td><td>14.50% p.a.</td><td>TBD</td><td>TBD</td><td>USD</td><td>1% +50 GEL</td><td>Sophisticated</td></tr>
+<tr><td>Nomura International Funding Pte. Ltd. (Samsung)</td><td>XS3384027085</td><td>400000</td><td>1 year note</td><td>TBD</td><td>10.50% p.a.</td><td>TBD</td><td>TBD</td><td>USD</td><td>1% +50 GEL</td><td>Sophisticated</td></tr>
 </tbody></table></div>
 <div class='section'>
 <div class='section-title funds-title'>FUNDS</div>
-<table>
-<thead class='funds-head'><tr>
+<table><thead class='funds-head'><tr>
 <th>ISSUER</th><th>ISIN</th><th>Min Lot</th><th>Price</th><th>Dividend</th><th>Currency</th><th>Commission</th><th>Client Status</th>
 </tr></thead><tbody>
-<tr>
-<td>Allianz Best Styles Global Equity SRI Fund</td><td>LU2034157375</td><td>0</td><td>255.660</td><td>-</td><td>-</td><td>Active</td><td></td></tr>
-<tr>
-<td>Allianz Global High Yield Fund</td><td>LU1480270997</td><td>0</td><td>9.830</td><td>5.66%</td><td>-</td><td>Active</td><td></td></tr>
-<tr>
-<td>Allianz Income and Growth Fund</td><td>LU0820561818</td><td>0</td><td>8.576</td><td>7.70%</td><td>-</td><td>Active</td><td></td></tr>
-<tr>
-<td>Allianz Global Intelligent Cities Income Fund</td><td>LU2272731600</td><td>0</td><td>11.845</td><td>4.98%</td><td>-</td><td>Active</td><td></td></tr>
-<tr>
-<td>Allianz Money Market USD Fund</td><td>LU0057107152</td><td>0</td><td>104.452</td><td>2.89%</td><td>-</td><td>Active</td><td></td></tr>
-<tr>
-<td>Allianz Oriental Income Fund</td><td>LU0348783233</td><td>0</td><td>301.050</td><td>1.15%</td><td>-</td><td>Active</td><td></td></tr>
-<tr>
-<td>Lord Abbett Global High Yield Fund</td><td>IE00BD89JH91</td><td>0</td><td>9.300</td><td>7.26%</td><td>-</td><td>Active</td><td></td></tr>
+<tr><td>Allianz Best Styles Global Equity SRI Fund</td><td>LU2034157375</td><td>0</td><td>255.660</td><td>-</td><td>USD</td><td>0.30% + 50 GEL</td><td>-</td></tr>
+<tr><td>Allianz Global High Yield Fund</td><td>LU1480270997</td><td>0</td><td>9.830</td><td>5.66%</td><td>USD</td><td>0.30% + 50 GEL</td><td>-</td></tr>
+<tr><td>Allianz Income and Growth Fund</td><td>LU0820561818</td><td>0</td><td>8.576</td><td>7.70%</td><td>USD</td><td>0.30% + 50 GEL</td><td>-</td></tr>
+<tr><td>Allianz Global Intelligent Cities Income Fund</td><td>LU2272731600</td><td>0</td><td>11.845</td><td>4.98%</td><td>USD</td><td>0.30% + 50 GEL</td><td>-</td></tr>
+<tr><td>Allianz Money Market USD Fund</td><td>LU0057107152</td><td>0</td><td>104.452</td><td>2.89%</td><td>USD</td><td>0.30% + 50 GEL</td><td>-</td></tr>
+<tr><td>Allianz Oriental Income Fund</td><td>LU0348783233</td><td>0</td><td>301.050</td><td>1.15%</td><td>USD</td><td>0.30% + 50 GEL</td><td>-</td></tr>
+<tr><td>Lord Abbett Global High Yield Fund</td><td>IE00BD89JH91</td><td>0</td><td>9.300</td><td>7.26%</td><td>USD</td><td>0.30% + 50 GEL</td><td>-</td></tr>
+<tr><td>saijdnxa</td><td></td><td></td><td>0.000</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
 </tbody></table></div>
 <div class='footer'>
 <span>Source: Brokerage &nbsp;|&nbsp; 29 Jul 2026</span>
