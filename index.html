@@ -1,274 +1,74 @@
-Sub GenerateHTML()
-
-    Dim wb As Workbook
-    Dim ws As Worksheet
-    Dim html As String
-    Dim filePath As String
-    Dim fileNum As Integer
-    Dim i As Integer
-    Dim lastRow As Integer
-    Dim productType As String
-    Dim dateNow As String
-
-    Set wb = ThisWorkbook
-    Set ws = wb.Sheets(1)
-
-    dateNow = Format(Date, "DD MMM YYYY")
-    lastRow = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
-
-    html = "<!DOCTYPE html>" & vbNewLine
-    html = html & "<html lang='en'>" & vbNewLine
-    html = html & "<head>" & vbNewLine
-    html = html & "<meta charset='UTF-8'>" & vbNewLine
-    html = html & "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" & vbNewLine
-    html = html & "<title>Active Brokerage Offerings</title>" & vbNewLine
-    html = html & "<style>" & vbNewLine
-    html = html & "* { margin: 0; padding: 0; box-sizing: border-box; }" & vbNewLine
-    html = html & "body { font-family: 'BOG 2018', 'Segoe UI', Arial, sans-serif; background: #e8eaf0; padding: 20px; min-height: 100vh; }" & vbNewLine
-    html = html & ".container { max-width: 1360px; margin: 0 auto; background: #f0f2f7; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }" & vbNewLine
-    html = html & ".header { background: #3a3a3a; color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }" & vbNewLine
-    html = html & ".header h1 { font-size: 20px; font-weight: 700; }" & vbNewLine
-    html = html & ".header .updated { font-size: 13px; color: #cccccc; }" & vbNewLine
-    html = html & ".section { margin: 16px 12px; background: white; border-radius: 4px; overflow: hidden; border: 1px solid #dde0e8; }" & vbNewLine
-    html = html & ".section-title { padding: 10px 14px; font-size: 13px; font-weight: 700; letter-spacing: 0.8px; border-bottom: 1px solid #dde0e8; }" & vbNewLine
-    html = html & ".bonds-title { color: #2eaa6e; }" & vbNewLine
-    html = html & ".structured-title { color: #7b5ea7; }" & vbNewLine
-    html = html & ".funds-title { color: #2eaa6e; }" & vbNewLine
-    html = html & "table { width: 100%; border-collapse: collapse; font-size: 12.5px; }" & vbNewLine
-    html = html & ".bonds-head tr { background: #4db88a; }" & vbNewLine
-    html = html & ".structured-head tr { background: #8b6db5; }" & vbNewLine
-    html = html & ".funds-head tr { background: #4db88a; }" & vbNewLine
-    html = html & "thead th { padding: 9px 12px; text-align: left; font-weight: 600; font-size: 12px; color: white; }" & vbNewLine
-    html = html & "tbody tr { border-bottom: 1px solid #eef0f5; }" & vbNewLine
-    html = html & "tbody tr:last-child { border-bottom: none; }" & vbNewLine
-    html = html & "tbody tr:hover { background: #f5f7fc; }" & vbNewLine
-    html = html & "tbody td { padding: 9px 12px; color: #2a2a2a; }" & vbNewLine
-    html = html & ".footer { background: #3a3a3a; color: #aaaaaa; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 4px; }" & vbNewLine
-    html = html & ".footer .brand { color: white; font-weight: 700; font-size: 12px; letter-spacing: 1px; }" & vbNewLine
-    html = html & "</style>" & vbNewLine
-    html = html & "</head>" & vbNewLine
-    html = html & "<body>" & vbNewLine
-    html = html & "<div class='container'>" & vbNewLine
-
-    ' HEADER
-    html = html & "<div class='header'>" & vbNewLine
-    html = html & "<h1>Active Brokerage Offerings</h1>" & vbNewLine
-    html = html & "<span class='updated'>Updated: " & dateNow & "</span>" & vbNewLine
-    html = html & "</div>" & vbNewLine
-
-    '======================
-    ' BONDS
-    ' A=Product_Type B=Issuer C=ISIN D=Currency E=Min Lot F=Avail Qty G=Coupon H=YTM I=Price J=Maturity K=Client Status L=Product Status
-    '======================
-    html = html & "<div class='section'>" & vbNewLine
-    html = html & "<div class='section-title bonds-title'>BONDS</div>" & vbNewLine
-    html = html & "<table><thead class='bonds-head'><tr>" & vbNewLine
-    html = html & "<th>ISSUER</th><th>ISIN</th><th>Currency</th><th>Min Lot</th><th>Avail. Qty</th><th>Coupon</th><th>YTM</th><th>Price</th><th>Maturity Date</th><th>Client Status</th>" & vbNewLine
-    html = html & "</tr></thead><tbody>" & vbNewLine
-
-    For i = 2 To lastRow
-        productType = Trim(LCase(CStr(ws.Cells(i, 1).Value)))
-        If productType = "bond" Then
-
-            Dim bMaturity As String
-            Dim bPrice As String
-            Dim bCoupon As String
-            Dim bYTM As String
-
-            ' Maturity - column J
-            If IsDate(ws.Cells(i, 10).Value) Then
-                bMaturity = Format(CDate(ws.Cells(i, 10).Value), "DD/MM/YYYY")
-            Else
-                bMaturity = CStr(ws.Cells(i, 10).Value)
-            End If
-
-            ' Price - column I
-            If IsNumeric(ws.Cells(i, 9).Value) Then
-                bPrice = Format(CDbl(ws.Cells(i, 9).Value), "0.00")
-            Else
-                bPrice = CStr(ws.Cells(i, 9).Value)
-            End If
-
-            ' Coupon - column G
-            If IsNumeric(ws.Cells(i, 7).Value) Then
-                If CDbl(ws.Cells(i, 7).Value) < 1 Then
-                    bCoupon = Format(CDbl(ws.Cells(i, 7).Value), "0.00%")
-                Else
-                    bCoupon = CStr(ws.Cells(i, 7).Value)
-                End If
-            Else
-                bCoupon = CStr(ws.Cells(i, 7).Value)
-            End If
-
-            ' YTM - column H
-            If IsNumeric(ws.Cells(i, 8).Value) Then
-                If CDbl(ws.Cells(i, 8).Value) < 1 Then
-                    bYTM = Format(CDbl(ws.Cells(i, 8).Value), "0.00%")
-                Else
-                    bYTM = CStr(ws.Cells(i, 8).Value)
-                End If
-            Else
-                bYTM = CStr(ws.Cells(i, 8).Value)
-            End If
-
-            html = html & "<tr>"
-            html = html & "<td>" & CStr(ws.Cells(i, 2).Value) & "</td>"
-            html = html & "<td>" & CStr(ws.Cells(i, 3).Value) & "</td>"
-            html = html & "<td>" & CStr(ws.Cells(i, 4).Value) & "</td>"
-            html = html & "<td>" & Format(CDbl(ws.Cells(i, 5).Value), "#,##0") & "</td>"
-            html = html & "<td>" & CStr(ws.Cells(i, 6).Value) & "</td>"
-            html = html & "<td>" & bCoupon & "</td>"
-            html = html & "<td>" & bYTM & "</td>"
-            html = html & "<td>" & bPrice & "</td>"
-            html = html & "<td>" & bMaturity & "</td>"
-            html = html & "<td>" & CStr(ws.Cells(i, 11).Value) & "</td>"
-            html = html & "</tr>" & vbNewLine
-        End If
-    Next i
-
-    html = html & "</tbody></table></div>" & vbNewLine
-
-    '======================
-    ' STRUCTURED NOTES
-    ' A=Product_Type B=Issuer C=ISIN D=Currency E=Min Lot F=Avail Qty G=Coupon H=YTM I=Price J=Maturity K=Client Status L=Product Status
-    '======================
-    html = html & "<div class='section'>" & vbNewLine
-    html = html & "<div class='section-title structured-title'>STRUCTURED NOTES</div>" & vbNewLine
-    html = html & "<table><thead class='structured-head'><tr>" & vbNewLine
-    html = html & "<th>ISSUER</th><th>ISIN</th><th>Currency</th><th>Min Lot</th><th>Avail. Qty</th><th>Coupon</th><th>YTM</th><th>Price</th><th>Maturity Date</th><th>Client Status</th>" & vbNewLine
-    html = html & "</tr></thead><tbody>" & vbNewLine
-
-    For i = 2 To lastRow
-        productType = Trim(LCase(CStr(ws.Cells(i, 1).Value)))
-        If productType = "structured note" Then
-
-            Dim sMaturity As String
-            Dim sPrice As String
-            Dim sCoupon As String
-            Dim sYTM As String
-
-            ' Maturity - column J
-            If IsDate(ws.Cells(i, 10).Value) Then
-                sMaturity = Format(CDate(ws.Cells(i, 10).Value), "DD/MM/YYYY")
-            Else
-                sMaturity = CStr(ws.Cells(i, 10).Value)
-            End If
-
-            ' Price - column I
-            If IsNumeric(ws.Cells(i, 9).Value) Then
-                sPrice = Format(CDbl(ws.Cells(i, 9).Value), "0.00")
-            Else
-                sPrice = CStr(ws.Cells(i, 9).Value)
-            End If
-
-            ' Coupon - column G
-            If IsNumeric(ws.Cells(i, 7).Value) Then
-                If CDbl(ws.Cells(i, 7).Value) < 1 Then
-                    sCoupon = Format(CDbl(ws.Cells(i, 7).Value), "0.00%")
-                Else
-                    sCoupon = CStr(ws.Cells(i, 7).Value)
-                End If
-            Else
-                sCoupon = CStr(ws.Cells(i, 7).Value)
-            End If
-
-            ' YTM - column H
-            If IsNumeric(ws.Cells(i, 8).Value) Then
-                If CDbl(ws.Cells(i, 8).Value) < 1 Then
-                    sYTM = Format(CDbl(ws.Cells(i, 8).Value), "0.00%")
-                Else
-                    sYTM = CStr(ws.Cells(i, 8).Value)
-                End If
-            Else
-                sYTM = CStr(ws.Cells(i, 8).Value)
-            End If
-
-            html = html & "<tr>"
-            html = html & "<td>" & CStr(ws.Cells(i, 2).Value) & "</td>"
-            html = html & "<td>" & CStr(ws.Cells(i, 3).Value) & "</td>"
-            html = html & "<td>" & CStr(ws.Cells(i, 4).Value) & "</td>"
-            html = html & "<td>" & Format(CDbl(ws.Cells(i, 5).Value), "#,##0") & "</td>"
-            html = html & "<td>" & CStr(ws.Cells(i, 6).Value) & "</td>"
-            html = html & "<td>" & sCoupon & "</td>"
-            html = html & "<td>" & sYTM & "</td>"
-            html = html & "<td>" & sPrice & "</td>"
-            html = html & "<td>" & sMaturity & "</td>"
-            html = html & "<td>" & CStr(ws.Cells(i, 11).Value) & "</td>"
-            html = html & "</tr>" & vbNewLine
-        End If
-    Next i
-
-    html = html & "</tbody></table></div>" & vbNewLine
-
-    '======================
-    ' FUNDS
-    ' A=Product_Type B=Issuer C=ISIN D=Currency E=Min Lot F=Dividend G=Price H=Client Status I=Product Status
-    '======================
-    html = html & "<div class='section'>" & vbNewLine
-    html = html & "<div class='section-title funds-title'>FUNDS</div>" & vbNewLine
-    html = html & "<table><thead class='funds-head'><tr>" & vbNewLine
-    html = html & "<th>ISSUER</th><th>ISIN</th><th>Currency</th><th>Min Lot</th><th>Dividend</th><th>Price</th><th>Client Status</th>" & vbNewLine
-    html = html & "</tr></thead><tbody>" & vbNewLine
-
-    For i = 2 To lastRow
-        productType = Trim(LCase(CStr(ws.Cells(i, 1).Value)))
-        If productType = "fund" Then
-
-            Dim fPrice As String
-            Dim fDividend As String
-
-            ' Price - column G
-            If IsNumeric(ws.Cells(i, 7).Value) Then
-                fPrice = Format(CDbl(ws.Cells(i, 7).Value), "0.000")
-            Else
-                fPrice = CStr(ws.Cells(i, 7).Value)
-            End If
-
-            ' Dividend - column F
-            If IsNumeric(ws.Cells(i, 6).Value) Then
-                If CDbl(ws.Cells(i, 6).Value) = 0 Then
-                    fDividend = "-"
-                ElseIf CDbl(ws.Cells(i, 6).Value) < 1 Then
-                    fDividend = Format(CDbl(ws.Cells(i, 6).Value), "0.00%")
-                Else
-                    fDividend = CStr(ws.Cells(i, 6).Value)
-                End If
-            ElseIf Trim(CStr(ws.Cells(i, 6).Value)) = "" Or Trim(CStr(ws.Cells(i, 6).Value)) = "-" Then
-                fDividend = "-"
-            Else
-                fDividend = CStr(ws.Cells(i, 6).Value)
-            End If
-
-            html = html & "<tr>"
-            html = html & "<td>" & CStr(ws.Cells(i, 2).Value) & "</td>"
-            html = html & "<td>" & CStr(ws.Cells(i, 3).Value) & "</td>"
-            html = html & "<td>" & CStr(ws.Cells(i, 4).Value) & "</td>"
-            html = html & "<td>" & Format(CDbl(ws.Cells(i, 5).Value), "#,##0") & "</td>"
-            html = html & "<td>" & fDividend & "</td>"
-            html = html & "<td>" & fPrice & "</td>"
-            html = html & "<td>" & CStr(ws.Cells(i, 8).Value) & "</td>"
-            html = html & "</tr>" & vbNewLine
-        End If
-    Next i
-
-    html = html & "</tbody></table></div>" & vbNewLine
-
-    ' FOOTER
-    html = html & "<div class='footer'>" & vbNewLine
-    html = html & "<span>Source: Brokerage &nbsp;|&nbsp; " & dateNow & "</span>" & vbNewLine
-    html = html & "<span class='brand'>GALT &amp; TAGGART</span>" & vbNewLine
-    html = html & "</div>" & vbNewLine
-    html = html & "</div>" & vbNewLine
-    html = html & "</body>" & vbNewLine
-    html = html & "</html>"
-
-    ' SAVE FILE
-    filePath = ThisWorkbook.Path & "\index.html"
-    fileNum = FreeFile
-    Open filePath For Output As #fileNum
-    Print #fileNum, html
-    Close #fileNum
-
-    MsgBox "Done! index.html saved successfully." & vbNewLine & vbNewLine & "Now upload it to GitHub.", vbInformation, "Success"
-
-End Sub
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>Active Brokerage Offerings</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'BOG 2018', 'Segoe UI', Arial, sans-serif; background: #e8eaf0; padding: 20px; min-height: 100vh; }
+.container { max-width: 1360px; margin: 0 auto; background: #f0f2f7; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+.header { background: #3a3a3a; color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header .updated { font-size: 13px; color: #cccccc; }
+.section { margin: 16px 12px; background: white; border-radius: 4px; overflow: hidden; border: 1px solid #dde0e8; }
+.section-title { padding: 10px 14px; font-size: 13px; font-weight: 700; letter-spacing: 0.8px; border-bottom: 1px solid #dde0e8; }
+.bonds-title { color: #2eaa6e; }
+.structured-title { color: #7b5ea7; }
+.funds-title { color: #2eaa6e; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.bonds-head tr { background: #4db88a; }
+.structured-head tr { background: #8b6db5; }
+.funds-head tr { background: #4db88a; }
+thead th { padding: 9px 12px; text-align: left; font-weight: 600; font-size: 12px; color: white; }
+tbody tr { border-bottom: 1px solid #eef0f5; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #f5f7fc; }
+tbody td { padding: 9px 12px; color: #2a2a2a; }
+.footer { background: #3a3a3a; color: #aaaaaa; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 4px; }
+.footer .brand { color: white; font-weight: 700; font-size: 12px; letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div class='container'>
+<div class='header'>
+<h1>Active Brokerage Offerings</h1>
+<span class='updated'>Updated: 29 Jul 2026</span>
+</div>
+<div class='section'>
+<div class='section-title bonds-title'>BONDS</div>
+<table><thead class='bonds-head'><tr>
+<th>ISSUER</th><th>ISIN</th><th>Currency</th><th>Min Lot</th><th>Avail. Qty</th><th>Coupon</th><th>YTM</th><th>Price</th><th>Maturity Date</th><th>Client Status</th>
+</tr></thead><tbody>
+<tr><td>IG Development Georgia</td><td>GE2700605548</td><td>USD</td><td>1,000</td><td>875</td><td>7.25%</td><td>7.25%</td><td>1003.77</td><td>08/07/2028</td><td>-</td></tr>
+<tr><td>IG Development Georgia</td><td>GE2700605258</td><td>USD</td><td>1,000</td><td>80</td><td>7.75%</td><td>7.50%</td><td>1012.63</td><td>12/12/2027</td><td>-</td></tr>
+<tr><td>Gudauri Lodge </td><td>GE2700605191</td><td>USD</td><td>1,000</td><td>25</td><td>8.25%</td><td>8.00%</td><td>1029.62</td><td>03/10/2027</td><td>Sophisticated</td></tr>
+</tbody></table></div>
+<div class='section'>
+<div class='section-title structured-title'>STRUCTURED NOTES</div>
+<table><thead class='structured-head'><tr>
+<th>ISSUER</th><th>ISIN</th><th>Currency</th><th>Min Lot</th><th>Avail. Qty</th><th>Coupon</th><th>YTM</th><th>Price</th><th>Maturity Date</th><th>Client Status</th>
+</tr></thead><tbody>
+<tr><td>Nomura International Funding Pte. Ltd. (SK Hynix)</td><td>-</td><td>USD</td><td>400,000</td><td>TBD</td><td>14.50% p.a.</td><td>TBD</td><td>TBD</td><td>1 year note</td><td>Sophisticated</td></tr>
+<tr><td>Nomura International Funding Pte. Ltd. (Samsung)</td><td>XS3384027085</td><td>USD</td><td>400,000</td><td>TBD</td><td>10.50% p.a.</td><td>TBD</td><td>TBD</td><td>1 year note</td><td>Sophisticated</td></tr>
+</tbody></table></div>
+<div class='section'>
+<div class='section-title funds-title'>FUNDS</div>
+<table><thead class='funds-head'><tr>
+<th>ISSUER</th><th>ISIN</th><th>Currency</th><th>Min Lot</th><th>Dividend</th><th>Price</th><th>Client Status</th>
+</tr></thead><tbody>
+<tr><td>Allianz Best Styles Global Equity SRI Fund</td><td>LU2034157375</td><td>USD</td><td>100,000</td><td>-</td><td>255.660</td><td>-</td></tr>
+<tr><td>Allianz Global High Yield Fund</td><td>LU1480270997</td><td>USD</td><td>100,000</td><td>5.66%</td><td>9.830</td><td>-</td></tr>
+<tr><td>Allianz Income and Growth Fund</td><td>LU0820561818</td><td>USD</td><td>100,000</td><td>7.70%</td><td>8.576</td><td>-</td></tr>
+<tr><td>Allianz Global Intelligent Cities Income Fund</td><td>LU2272731600</td><td>USD</td><td>100,000</td><td>4.98%</td><td>11.845</td><td>-</td></tr>
+<tr><td>Allianz Money Market USD Fund</td><td>LU0057107152</td><td>USD</td><td>100,000</td><td>2.89%</td><td>104.452</td><td>-</td></tr>
+<tr><td>Allianz Oriental Income Fund</td><td>LU0348783233</td><td>USD</td><td>100,000</td><td>1.15%</td><td>301.050</td><td>-</td></tr>
+<tr><td>Lord Abbett Global High Yield Fund</td><td>IE00BD89JH91</td><td>USD</td><td>100,000</td><td>7.26%</td><td>9.300</td><td>-</td></tr>
+</tbody></table></div>
+<div class='footer'>
+<span>Source: Brokerage &nbsp;|&nbsp; 29 Jul 2026</span>
+<span class='brand'>GALT &amp; TAGGART</span>
+</div>
+</div>
+</body>
+</html>
