@@ -1,237 +1,92 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 <title>Active Brokerage Offerings</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: #e8eaf0;
-    padding: 20px;
-    min-height: 100vh;
-  }
-  .container {
-    max-width: 1360px;
-    margin: 0 auto;
-    background: #f0f2f7;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-  }
-  .header {
-    background: #3a3a3a;
-    color: white;
-    padding: 14px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .header h1 { font-size: 20px; font-weight: 700; }
-  .header .updated { font-size: 13px; color: #cccccc; }
-  .section {
-    margin: 16px 12px;
-    background: white;
-    border-radius: 4px;
-    overflow: hidden;
-    border: 1px solid #dde0e8;
-  }
-  .section-title {
-    padding: 10px 14px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.8px;
-    border-bottom: 1px solid #dde0e8;
-  }
-  .section-title.bonds { color: #2eaa6e; }
-  .section-title.structured { color: #7b5ea7; }
-  .section-title.funds { color: #2eaa6e; }
-  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-  thead.bonds-head tr { background: #4db88a; }
-  thead.structured-head tr { background: #8b6db5; }
-  thead.funds-head tr { background: #4db88a; }
-  thead th {
-    padding: 9px 12px;
-    text-align: left;
-    font-weight: 600;
-    font-size: 12px;
-    color: white;
-  }
-  tbody tr { border-bottom: 1px solid #eef0f5; }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: #f5f7fc; }
-  tbody td { padding: 9px 12px; color: #2a2a2a; }
-  .footer {
-    background: #3a3a3a;
-    color: #aaaaaa;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 11px;
-    margin-top: 4px;
-  }
-  .footer .brand { color: white; font-weight: 700; font-size: 12px; letter-spacing: 1px; }
-  .loading { padding: 20px; text-align: center; color: #888; font-size: 13px; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Segoe UI', Arial, sans-serif; background: #e8eaf0; padding: 20px; min-height: 100vh; }
+.container { max-width: 1360px; margin: 0 auto; background: #f0f2f7; border-radius: 4px; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+.header { background: #3a3a3a; color: white; padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { font-size: 20px; font-weight: 700; }
+.header .updated { font-size: 13px; color: #cccccc; }
+.section { margin: 16px 12px; background: white; border-radius: 4px; overflow: hidden; border: 1px solid #dde0e8; }
+.section-title { padding: 10px 14px; font-size: 13px; font-weight: 700; letter-spacing: 0.8px; border-bottom: 1px solid #dde0e8; }
+.bonds-title { color: #2eaa6e; }
+.structured-title { color: #7b5ea7; }
+.funds-title { color: #2eaa6e; }
+table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.bonds-head tr { background: #4db88a; }
+.structured-head tr { background: #8b6db5; }
+.funds-head tr { background: #4db88a; }
+thead th { padding: 9px 12px; text-align: left; font-weight: 600; font-size: 12px; color: white; }
+tbody tr { border-bottom: 1px solid #eef0f5; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #f5f7fc; }
+tbody td { padding: 9px 12px; color: #2a2a2a; }
+.footer { background: #3a3a3a; color: #aaaaaa; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; margin-top: 4px; }
+.footer .brand { color: white; font-weight: 700; font-size: 12px; letter-spacing: 1px; }
 </style>
 </head>
 <body>
-<div class="container">
-
-  <div class="header">
-    <h1>Active Brokerage Offerings</h1>
-    <span class="updated" id="lastUpdated">Loading...</span>
-  </div>
-
-  <!-- BONDS -->
-  <div class="section">
-    <div class="section-title bonds">BONDS</div>
-    <table>
-      <thead class="bonds-head">
-        <tr>
-          <th>ISSUER</th><th>ISIN</th><th>Min Lot</th><th>Maturity</th>
-          <th>Price</th><th>Coupon</th><th>YTM</th><th>Avail. Qty</th>
-          <th>Currency</th><th>Commission</th><th>Client Status</th>
-        </tr>
-      </thead>
-      <tbody id="bonds-body">
-        <tr><td colspan="11" class="loading">Loading data...</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- STRUCTURED NOTES -->
-  <div class="section">
-    <div class="section-title structured">STRUCTURED NOTES</div>
-    <table>
-      <thead class="structured-head">
-        <tr>
-          <th>ISSUER</th><th>ISIN</th><th>Min Lot</th><th>Maturity</th>
-          <th>Price</th><th>Coupon</th><th>YTM</th><th>Avail. Qty</th>
-          <th>Currency</th><th>Commission</th><th>Client Status</th>
-        </tr>
-      </thead>
-      <tbody id="structured-body">
-        <tr><td colspan="11" class="loading">Loading data...</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <!-- FUNDS -->
-  <div class="section">
-    <div class="section-title funds">FUNDS</div>
-    <table>
-      <thead class="funds-head">
-        <tr>
-          <th>ISSUER</th><th>ISIN</th><th>Min Lot</th><th>Price</th>
-          <th>Dividend</th><th>Currency</th><th>Commission</th><th>Client Status</th>
-        </tr>
-      </thead>
-      <tbody id="funds-body">
-        <tr><td colspan="8" class="loading">Loading data...</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="footer">
-    <span id="footerSource">Source: Brokerage</span>
-    <span class="brand">GALT &amp; TAGGART</span>
-  </div>
-
+<div class='container'>
+<div class='header'>
+<h1>Active Brokerage Offerings</h1>
+<span class='updated'>Updated: 29 Jul 2026</span>
 </div>
-
-<script>
-  // ============================================================
-  // PASTE YOUR GOOGLE SHEETS CSV URL HERE
-  const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT1eUo8nV_kErQlJdnlZURXyTzikGCpsBlc7OkwuCQutOpATTnl_IxpBJ575WCaqNR6Ep3UXyvhZX7v/pub?output=csv' ;
-  // ============================================================
-
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    return lines.map(line => {
-      // Handle commas inside quoted fields
-      const result = [];
-      let current = '';
-      let inQuotes = false;
-      for (let ch of line) {
-        if (ch === '"') { inQuotes = !inQuotes; }
-        else if (ch === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
-        else { current += ch; }
-      }
-      result.push(current.trim());
-      return result;
-    });
-  }
-
-  function buildBondRow(row) {
-    // Columns: Product_Type, Issuer, ISIN, Min Lot, Maturity, Price, Coupon, YTM, Avail Qty, Currency, Commission, Client Status
-    return `<tr>
-      <td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[4]}</td>
-      <td>${row[5]}</td><td>${row[6]}</td><td>${row[7]}</td><td>${row[8]}</td>
-      <td>${row[9]}</td><td>${row[10]}</td><td>${row[11]}</td>
-    </tr>`;
-  }
-
-  function buildStructuredRow(row) {
-    return `<tr>
-      <td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[4]}</td>
-      <td>${row[5]}</td><td>${row[6]}</td><td>${row[7]}</td><td>${row[8]}</td>
-      <td>${row[9]}</td><td>${row[10]}</td><td>${row[11]}</td>
-    </tr>`;
-  }
-
-  function buildFundRow(row) {
-    // Funds have different columns: Product_Type, Issuer, ISIN, Min Lot, Price, Dividend, Currency, Commission, Client Status
-    return `<tr>
-      <td>${row[1]}</td><td>${row[2]}</td><td>${row[3]}</td><td>${row[4]}</td>
-      <td>${row[5]}</td><td>${row[9]}</td><td>${row[10]}</td><td>${row[11]}</td>
-    </tr>`;
-  }
-
-  async function loadData() {
-    try {
-      const response = await fetch(SHEET_URL);
-      const text = await response.text();
-      const rows = parseCSV(text);
-
-      // Skip header row
-      const dataRows = rows.slice(1);
-
-      let bondsHTML = '';
-      let structuredHTML = '';
-      let fundsHTML = '';
-
-      dataRows.forEach(row => {
-        if (!row[0]) return; // skip empty rows
-        const type = row[0].trim().toLowerCase();
-        if (type === 'bond') bondsHTML += buildBondRow(row);
-        else if (type === 'structured note') structuredHTML += buildStructuredRow(row);
-        else if (type === 'fund') fundsHTML += buildFundRow(row);
-      });
-
-      document.getElementById('bonds-body').innerHTML = bondsHTML || '<tr><td colspan="11">No data</td></tr>';
-      document.getElementById('structured-body').innerHTML = structuredHTML || '<tr><td colspan="11">No data</td></tr>';
-      document.getElementById('funds-body').innerHTML = fundsHTML || '<tr><td colspan="8">No data</td></tr>';
-
-      // Update timestamp
-      const now = new Date();
-      const dateStr = now.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
-      document.getElementById('lastUpdated').textContent = `Updated: ${dateStr}`;
-      document.getElementById('footerSource').textContent = `Source: Brokerage  |  ${dateStr}`;
-
-    } catch (error) {
-      console.error('Failed to load data:', error);
-      document.getElementById('bonds-body').innerHTML = '<tr><td colspan="11">Failed to load data. Check sheet URL.</td></tr>';
-    }
-  }
-
-  // Load on page open
-  loadData();
-
-  // Auto-refresh every 5 minutes
-  setInterval(loadData, 5 * 60 * 1000);
-</script>
-
+<div class='section'>
+<div class='section-title bonds-title'>BONDS</div>
+<table>
+<thead class='bonds-head'><tr>
+<th>ISSUER</th><th>ISIN</th><th>Min Lot</th><th>Maturity</th><th>Price</th><th>Coupon</th><th>YTM</th><th>Avail. Qty</th><th>Currency</th><th>Commission</th><th>Client Status</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>IG Development Georgia</td><td>GE2700605548</td><td>1000</td><td>7/8/2028</td><td>1003.77</td><td>0.0725</td><td>0.0725</td><td>875</td><td>USD</td><td>0.003</td><td>-</td></tr>
+<tr>
+<td>IG Development Georgia</td><td>GE2700605258</td><td>1000</td><td>12/12/2027</td><td>1012.63</td><td>0.0775</td><td>0.075</td><td>80</td><td>USD</td><td>0.003</td><td>-</td></tr>
+<tr>
+<td>Gudauri Lodge </td><td>GE2700605191</td><td>1000</td><td>10/3/2027</td><td>1029.62</td><td>0.0825</td><td>0.08</td><td>25</td><td>USD</td><td>0.003</td><td>-</td></tr>
+</tbody></table></div>
+<div class='section'>
+<div class='section-title structured-title'>STRUCTURED NOTES</div>
+<table>
+<thead class='structured-head'><tr>
+<th>ISSUER</th><th>ISIN</th><th>Min Lot</th><th>Maturity</th><th>Price</th><th>Coupon</th><th>YTM</th><th>Avail. Qty</th><th>Currency</th><th>Commission</th><th>Client Status</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Nomura International Funding Pte. Ltd. (SK Hynix)</td><td>-</td><td>400000</td><td>1 year note</td><td>TBD</td><td>14.50% p.a.</td><td>TBD</td><td>TBD</td><td>USD</td><td>1% +50 GEL</td><td>Sophisticated</td></tr>
+<tr>
+<td>Nomura International Funding Pte. Ltd. (Samsung)</td><td>XS3384027085</td><td>400000</td><td>1 year note</td><td>TBD</td><td>10.50% p.a.</td><td>TBD</td><td>TBD</td><td>USD</td><td>1% +50 GEL</td><td>Sophisticated</td></tr>
+</tbody></table></div>
+<div class='section'>
+<div class='section-title funds-title'>FUNDS</div>
+<table>
+<thead class='funds-head'><tr>
+<th>ISSUER</th><th>ISIN</th><th>Min Lot</th><th>Price</th><th>Dividend</th><th>Currency</th><th>Commission</th><th>Client Status</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>Allianz Best Styles Global Equity SRI Fund</td><td>LU2034157375</td><td>0</td><td>-</td><td>USD</td><td>Active</td><td></td><td></td></tr>
+<tr>
+<td>Allianz Global High Yield Fund</td><td>LU1480270997</td><td>0</td><td>0.0566</td><td>USD</td><td>Active</td><td></td><td></td></tr>
+<tr>
+<td>Allianz Income and Growth Fund</td><td>LU0820561818</td><td>0</td><td>0.077</td><td>USD</td><td>Active</td><td></td><td></td></tr>
+<tr>
+<td>Allianz Global Intelligent Cities Income Fund</td><td>LU2272731600</td><td>0</td><td>0.0498</td><td>USD</td><td>Active</td><td></td><td></td></tr>
+<tr>
+<td>Allianz Money Market USD Fund</td><td>LU0057107152</td><td>0</td><td>0.0289</td><td>USD</td><td>Active</td><td></td><td></td></tr>
+<tr>
+<td>Allianz Oriental Income Fund</td><td>LU0348783233</td><td>0</td><td>0.0115</td><td>USD</td><td>Active</td><td></td><td></td></tr>
+<tr>
+<td>Lord Abbett Global High Yield Fund</td><td>IE00BD89JH91</td><td>0</td><td>0.0726</td><td>USD</td><td>Active</td><td></td><td></td></tr>
+</tbody></table></div>
+<div class='footer'>
+<span>Source: Brokerage &nbsp;|&nbsp; 29 Jul 2026</span>
+<span class='brand'>GALT &amp; TAGGART</span>
+</div>
+</div>
 </body>
 </html>
